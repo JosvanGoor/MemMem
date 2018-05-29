@@ -53,7 +53,7 @@ def get_page_rect_mask(image):
 
         if cur_hier[3] < 0: #toplvl component
             if w < 300 or h < 300: continue #too small
-            print('[{}, {}, {}, {}]'.format(x,y,w,h))
+            # print('[{}, {}, {}, {}]'.format(x,y,w,h))
             rects.append([x,y,w,h, cur_cont])
     
     middle = [0, 0, 1, 1]
