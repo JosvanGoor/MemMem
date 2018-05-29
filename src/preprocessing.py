@@ -11,10 +11,10 @@ def fill_white(image):
     floodflags |= cv2.FLOODFILL_MASK_ONLY
     floodflags |= (255 << 8)
 
-    num,img,mask,rect = cv2.floodFill(image, mask, seed, 255)
-    num,img,mask,rect = cv2.floodFill(img, mask, (w-2, h-2), 255)
-    num,img,mask,rect = cv2.floodFill(img, mask, (0, h-2), 255)
-    num,img,mask,rect = cv2.floodFill(img, mask, (w-2, 0), 255)
+    num, img, mask, rect = cv2.floodFill(image, mask, seed, 255)
+    num, img, mask, rect = cv2.floodFill(img, mask, (w-2, h-2), 255)
+    num, img, mask, rect = cv2.floodFill(img, mask, (0, h-2), 255)
+    num, img, mask, rect = cv2.floodFill(img, mask, (w-2, 0), 255)
     return img
 
 def get_gauss_otsu(image):
@@ -70,6 +70,31 @@ def get_page_rect_mask(image):
 
     return middle, mask
 
+def pad(image, max_size=[64,64]):
+    imsize = list(image.shape)
+    
+    if max(imsize) > 64: #Shrink the axis bigger then max_size
+        re0 = 1.0
+        re1 = 1.0
+
+        if imsize[0] > max_size[0]:
+            re0 = float(max_size[0]) / imsize[0]
+        if imsize[1] > max_size[1]:
+            re1 = float(max_size[1]) / imsize[1]
+
+        image = cv2.resize(image,(int(re1*imsize[1]),int(re0*imsize[0])), interpolation=cv2.INTER_CUBIC)
+
+        #apply padding
+        imsize = image.shape
+        pad_width = [max_size[0]-imsize[0],max_size[1]-imsize[1]]
+        top = int((pad_width[0])/2)
+        bottom = int((pad_width[0]+1)/2)
+        left = int((pad_width[1])/2)
+        right = int((pad_width[1]+1)/2)
+        white = [255, 255, 255]
+        image = cv2.copyMakeBorder(image, top , bottom, left, right, cv2.BORDER_CONSTANT, value=white)
+        return image
+
 def pythagoras(p1, p2):
     dx = (p1[0] - p2[0]) ** 2
     dy = (p1[1] - p1[1]) ** 2
@@ -80,6 +105,17 @@ def rect_middle(rect):
 
 def resize(image, proportion):
     return cv2.resize(image, (0,0), fx=proportion, fy=proportion)
+
+#Expects B&W Image
+def sideway_blurred(image, strength = 45):
+    if strength % 2 == 0:
+        strength += 1
+    
+    kernel = np.zeros((1, size))
+    kernel[0][:] = np.ones(size)
+    kernel = kernel / size
+
+    return cv2.filter2D(image, -1, kernel)
 
 def subimage(image, rect):
     x = rect[0]

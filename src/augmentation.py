@@ -6,7 +6,6 @@ from scipy.ndimage.interpolation import map_coordinates
 
 import preprocessing as pp
 
-
 def elastic_transform(image, alpha, sigma, random_state=None):
     """Elastic deformation of images as described in [Simard2003]_.
     .. [Simard2003] Simard, Steinkraus and Platt, "Best Practices for
@@ -28,6 +27,16 @@ def elastic_transform(image, alpha, sigma, random_state=None):
     indices = np.reshape(x+dx, (-1, 1)), np.reshape(y+dy, (-1, 1))
     
     return map_coordinates(image, indices, order=1).reshape(shape)
+
+def fade(t):
+    "6t^5 - 15t^4 + 10t^3"
+    return 6 * t**5 - 15 * t**4 + 10 * t**3
+
+def gradient(h,x,y):
+    "grad converts h to the right gradient vector and return the dot product with (x,y)"
+    vectors = np.array([[0,1],[0,-1],[1,0],[-1,0]])
+    g = vectors[h%4]
+    return g[:,:,0] * x + g[:,:,1] * y
 
 def lerp(a,b,x):
     "linear interpolation"
