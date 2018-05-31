@@ -31,7 +31,6 @@ class Image:
     def segment_lines(self):
         print("Segmenting {}/{}... ".format(self.folder, self.filename), end="")
         self.lines = ls.segmentLine(self.image)
-        self.lines = [ls.getSeg(self.image, x, y) for x, y in self.lines]
         print("done!")
 
 def list_files(directory):
