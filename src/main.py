@@ -42,9 +42,9 @@ class Image:
         for x in contours:
             contour_size = cv2.contourArea(x[4])
             if contour_size > (avg_size * 10):
-                self.image = cv2.drawContours(self.image, [x[4]], 0, 255, -1)
-        #cv2.imshow("contours", pp.resize(self.image, 0.5))
-        #cv2.waitKey(0)
+                self.image = cv2.drawContours(self.image, [x[4]], 0, 128, -1)
+        cv2.imshow("contours", pp.resize(self.image, 0.5))
+        cv2.waitKey(0)
 
     def segment_lines(self):
         print("Segmenting {}/{}... ".format(self.folder, self.filename), end="")
@@ -75,7 +75,7 @@ if __name__ == "__main__":
     images = [Image(directory, f) for f in files]
     for img in images:
         img.load_processed()
-        img.fill_gaps()
+        #img.fill_gaps()
         img.segment_lines()
 
     print("Now showing stuffs")
