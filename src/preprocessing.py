@@ -38,6 +38,21 @@ def get_letter_rects(image, minw = 15, minh = 15):
 
     return rects
 
+# misleading name LOL
+def get_all_rects(image, minw = 15, minh = 15):
+    image, contours, hierarchy = cv2.findContours(image, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+    hierarchy = hierarchy[0]
+
+    rects = []
+    for component in zip(contours, hierarchy):
+        if component[1][3] < 0: continue #remove top level contours
+
+        x, y, w, h = cv2.boundingRect(component[0])
+        if w < minw or h < minh: continue
+        rects.append([x,y,w,h, component[0]])
+    
+    return rects
+
 # expects B&W image
 def get_page_rect_mask(image):
     image_rect = [0, 0, image.shape[0], image.shape[1]]

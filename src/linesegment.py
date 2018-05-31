@@ -14,14 +14,14 @@ def getSliceHist(image, n_slices, exp_text_width, line_array, threshold, oversho
 		for y in range(0,height):
 			r = range(left, right)
 			sum_pixels = PSL_width - (sum(image[y][r])/255.0)
-			if sum_pixels > threshold:
+			if sum_pixels > threshold and sum_pixels < PSL_width * 0.8:
 				line_array[y] = line_array[y]+1
 	left = n_slices*PSL_width
 	right = n_slices*PSL_width+overshoot
 	for y in range(0,height):
 		r = range(left, right)
 		sum_pixels = overshoot - (sum(image[y][r])/255.0)
-		if sum_pixels > threshold:
+		if sum_pixels > threshold and sum_pixels < overshoot * 0.8:
 			line_array[y]=line_array[y]+1
 
 	for count, i in enumerate(line_array):
@@ -46,7 +46,7 @@ def getSeg(image, top, bot):
 	imw = image.shape[1]
 	seg = np.zeros([imh,0], dtype=np.uint8)
 	count = 0
-	for i in tqdm(range(imw)):
+	for i in range(imw):
 		if sum(image[0:imh,i])/255<imh:
 			if count > 5:
 				seg = np.pad(seg,((0,0),(0,10)),mode='constant')
@@ -60,7 +60,7 @@ def getSeg(image, top, bot):
 			count += 1
 	return seg
 
-def saveSegments(im, imname, line_tuples, pad, height, width, showseg, saveseg=0):
+def saveSegments(im, imname, line_tuples, pad, height, width, showseg=False, saveseg=False):
 	segments = []
 	for j, i in enumerate(line_tuples):
 		top = i[0]-pad
@@ -90,8 +90,8 @@ def showSegments(im, line_tuples, pad, height, width):
 		cv2.waitKey(0)
 
 
-def segmentLine(imname, exp_text_width=20, pad=10, PSL_width=128, threshold=8, showseg=0):
-	image = cv2.imread(imname,0)
+def segmentLine(image, exp_text_width=20, pad=10, PSL_width=128, threshold=8, showseg=0):
+	#image = cv2.imread(imname,0)
 	# image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 	# image = cv2.resize(image, (0,0), fx=0.5, fy=0.5)
 	height = image.shape[0]
@@ -103,12 +103,12 @@ def segmentLine(imname, exp_text_width=20, pad=10, PSL_width=128, threshold=8, s
 	line_array = [0]*height
 
 	line_tuples = getSliceHist(image, n_slices, exp_text_width, line_array, threshold, overshoot, PSL_width, height, width)
-	segments = saveSegments(image, imname, line_tuples, pad, height, width, showseg)
-	if showseg:
-		showSegments(image, line_tuples, pad, height, width)
+	segments = saveSegments(image, "imname", line_tuples, pad, height, width, showseg)
+	#if showseg:
+	#	showSegments(image, line_tuples, pad, height, width)
 
 	return segments
 
 
 
-segmentLine("ffilled.png", showseg=0)
+#segmentLine("ffilled.png", showseg=0)

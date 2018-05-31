@@ -2,6 +2,8 @@ import cv2
 import os
 import sys
 
+import numpy
+
 import preprocessing as pp
 import linesegment as ls
 
@@ -27,6 +29,22 @@ class Image:
         image2 = pp.get_gauss_otsu(image)
         self.image = pp.fill_white(image2)
         print("done!")
+    
+    def fill_gaps(self):
+        contours = pp.get_all_rects(self.image)
+        
+        avg_size = 0
+
+        for x in contours:
+            avg_size += cv2.contourArea(x[4])
+        
+        avg_size /= len(contours)
+        for x in contours:
+            contour_size = cv2.contourArea(x[4])
+            if contour_size > (avg_size * 10):
+                self.image = cv2.drawContours(self.image, [x[4]], 0, 255, -1)
+        #cv2.imshow("contours", pp.resize(self.image, 0.5))
+        #cv2.waitKey(0)
 
     def segment_lines(self):
         print("Segmenting {}/{}... ".format(self.folder, self.filename), end="")
@@ -57,7 +75,13 @@ if __name__ == "__main__":
     images = [Image(directory, f) for f in files]
     for img in images:
         img.load_processed()
+        img.fill_gaps()
         img.segment_lines()
 
-    for x in images[0].lines:
-        cv2.imshow("abc", x)
+    print("Now showing stuffs")
+    for img in images:
+        for line in img.lines:
+            cv2.imshow("abc", line)
+            cv2.waitKey(0)
+
+
