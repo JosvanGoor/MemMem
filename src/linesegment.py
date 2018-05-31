@@ -2,8 +2,6 @@ import cv2
 import numpy as np
 from tqdm import tqdm
 
-import preprocessing as pp
-
 def getSliceHist(image, n_slices, exp_text_width, line_array, threshold, overshoot, PSL_width, height, width):
 	is_line = False
 	line_tuples = []
@@ -44,17 +42,16 @@ def getSliceHist(image, n_slices, exp_text_width, line_array, threshold, oversho
 
 
 def getSeg(image, top, bot):
-	# image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 	imh = image.shape[0]
 	imw = image.shape[1]
-	seg = np.zeros([imh,0])
+	seg = np.zeros([imh,0], dtype=np.uint8)
 	count = 0
 	for i in tqdm(range(imw)):
-		if sum(image[0:imh,i])/255.0<imh:
+		if sum(image[0:imh,i])/255<imh:
 			if count > 5:
 				seg = np.pad(seg,((0,0),(0,10)),mode='constant')
 				segw = seg.shape[1]
-				seg[0:imh,segw-10:segw] = np.ones([imh,10])*255.0
+				seg[0:imh,segw-10:segw] = np.ones([imh,10], dtype=np.uint8)*255
 			seg = np.pad(seg,((0,0),(0,1)),mode='constant')
 			segw = seg.shape[1]
 			seg[0:imh,segw-1] = image[0:imh,i]
@@ -63,18 +60,22 @@ def getSeg(image, top, bot):
 			count += 1
 	return seg
 
-def saveSegments(im, line_tuples, pad, height, width, showseg):
-	im = cv2.cvtColor(im, cv2.COLOR_GRAY2BGR)
+def saveSegments(im, imname, line_tuples, pad, height, width, showseg, saveseg=0):
+	segments = []
 	for j, i in enumerate(line_tuples):
 		top = i[0]-pad
 		bot = i[1]+pad
 		segment = im[top:bot,0:width-1]
-		cv2.imwrite('seg_'+str(j)+'.png',im[top:bot,0:width-1])
 		seg = getSeg(segment, top, bot)
-		cv2.imwrite('seg'+str(j)+('.png'),seg)
+		segments.append(seg)
+		# cv2.imwrite(str(imname)+'seg'+str(j)+('.png'),seg)
+		# to get the whole line, without removing white spaces, uncomment the next line
+		if saveseg:
+			cv2.imwrite(str(imname)+'seg_'+str(j)+'.png',im[top:bot,0:width-1])
 		if showseg:
 			cv2.imshow('seg',seg)
 			cv2.waitKey(0)
+	return segments
 
 def showSegments(im, line_tuples, pad, height, width):
 	im = cv2.cvtColor(im, cv2.COLOR_GRAY2BGR)
@@ -85,14 +86,14 @@ def showSegments(im, line_tuples, pad, height, width):
 			cv2.rectangle(im,(10,top),(width-10,bot),(0,0,255),2)
 		else:
 			cv2.rectangle(im,(10,top),(width-10,bot),(255,0,0),2)
-	cv2.imshow('image', pp.resize(im, 0.5))
-	cv2.waitKey(0)
+		cv2.imshow('image', im)
+		cv2.waitKey(0)
 
 
-def segmentLine(image, exp_text_width=10, pad=10, PSL_width=128, threshold=8, showseg=0):
-	#image = cv2.imread(imname)
-	#image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-	#image = cv2.resize(image, (0,0), fx=0.5, fy=0.5)
+def segmentLine(imname, exp_text_width=20, pad=10, PSL_width=128, threshold=8, showseg=0):
+	image = cv2.imread(imname,0)
+	# image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+	# image = cv2.resize(image, (0,0), fx=0.5, fy=0.5)
 	height = image.shape[0]
 	width = image.shape[1]
 
@@ -101,11 +102,13 @@ def segmentLine(image, exp_text_width=10, pad=10, PSL_width=128, threshold=8, sh
 	threshold = PSL_width/8
 	line_array = [0]*height
 
-	# saveSegments(image, line_tuples, pad, height, width, showseg)
 	line_tuples = getSliceHist(image, n_slices, exp_text_width, line_array, threshold, overshoot, PSL_width, height, width)
-	#showSegments(image, line_tuples, pad, height, width)
-	return line_tuples
-	# if showseg:
+	segments = saveSegments(image, imname, line_tuples, pad, height, width, showseg)
+	if showseg:
+		showSegments(image, line_tuples, pad, height, width)
+
+	return segments
 
 
-#segmentLine("../ffilled.png")
+
+segmentLine("ffilled.png", showseg=0)
