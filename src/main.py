@@ -1,8 +1,10 @@
 import cv2
 import os
+import pickle
 import sys
 
 import numpy
+
 
 import preprocessing as pp
 import linesegment as ls
@@ -59,6 +61,22 @@ def list_files(directory):
     return os.listdir(directory)
 
 if __name__ == "__main__":
+    data = None
+
+    with open("../TEST_detections.pkl", "rb") as file:
+        data = pickle.load(file)
+
+    print(type(data))
+    print("len data: {}".format(len(data)))
+
+    #data[class][image][boxxes]
+
+    for dat in data:
+        print("len: {}".format(len(dat)))
+    #print(data[1])
+    print(data[1][0][0])
+
+if __name__ == "__main2__":
     if sys.version_info[0] < 3:
         print("Please use python 3...")
         print("    Example usage: python3 path/to/directory/")

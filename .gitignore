@@ -1,5 +1,7 @@
 input/
 output/
+output_old/
 **/__pycache__/
 **.pyc
+Outputs.zip
 tmp/
