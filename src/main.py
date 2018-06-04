@@ -5,53 +5,16 @@ import sys
 
 import numpy
 
-
+import data
+import network as n
 import preprocessing as pp
 import linesegment as ls
 
-class Image:
-    
-    def __init__(self, folder, filename):
-        self.folder = folder
-        self.filename = filename
+testnames = ["ffilled", "ffilled_crop", "seg0", "seg1", "seg2", "seg3",
+            "seg4", "seg5", "seg6", "seg7", "seg8", "seg9", "seg10", "seg11"]
+test_pkl = "../outputs/TEST_detections.pkl"
+easy_pkl = "../outputs/TEST_boxes_classes.pkl"
 
-        self.image = None
-        self.lines = []
-
-    def load_processed(self):
-        print("Loading {}/{}... ".format(self.folder, self.filename), end="")
-        filename = "{}/{}".format(self.folder, self.filename)
-        image = cv2.imread(filename, cv2.IMREAD_GRAYSCALE)
-        image2 = pp.get_gauss_otsu(image)
-
-        rect, mask = pp.get_page_rect_mask(image2)
-
-        image = (image * (mask // 255))
-        image = pp.subimage(image, rect)
-        image2 = pp.get_gauss_otsu(image)
-        self.image = pp.fill_white(image2)
-        print("done!")
-    
-    def fill_gaps(self):
-        contours = pp.get_all_rects(self.image)
-        
-        avg_size = 0
-
-        for x in contours:
-            avg_size += cv2.contourArea(x[4])
-        
-        avg_size /= len(contours)
-        for x in contours:
-            contour_size = cv2.contourArea(x[4])
-            if contour_size > (avg_size * 10):
-                self.image = cv2.drawContours(self.image, [x[4]], 0, 128, -1)
-        cv2.imshow("contours", pp.resize(self.image, 0.5))
-        cv2.waitKey(0)
-
-    def segment_lines(self):
-        print("Segmenting {}/{}... ".format(self.folder, self.filename), end="")
-        self.lines = ls.segmentLine(self.image)
-        print("done!")
 
 def list_files(directory):
     if not os.path.isdir(directory):
@@ -61,22 +24,16 @@ def list_files(directory):
     return os.listdir(directory)
 
 if __name__ == "__main__":
-    data = None
+    dat = n.list_characters(testnames, easy_pkl)
+    
+    for name, chars in dat.items():
+        print("File: {}\n    ".format(name), end="")
+        for c in chars:
+            print("{} ".format(c.name), end="")
+        print()
+        
 
-    with open("../TEST_detections.pkl", "rb") as file:
-        data = pickle.load(file)
-
-    print(type(data))
-    print("len data: {}".format(len(data)))
-
-    #data[class][image][boxxes]
-
-    for dat in data:
-        print("len: {}".format(len(dat)))
-    #print(data[1])
-    print(data[1][0][0])
-
-if __name__ == "__main2__":
+if __name__ == "__main__2":
     if sys.version_info[0] < 3:
         print("Please use python 3...")
         print("    Example usage: python3 path/to/directory/")
@@ -90,16 +47,9 @@ if __name__ == "__main2__":
     directory = sys.argv[1]
     files = list_files(directory)
     
-    images = [Image(directory, f) for f in files]
+    images = [data.Image(directory, f) for f in files]
     for img in images:
         img.load_processed()
-        #img.fill_gaps()
         img.segment_lines()
 
-    print("Now showing stuffs")
-    for img in images:
-        for line in img.lines:
-            cv2.imshow("abc", line)
-            cv2.waitKey(0)
-
-
+    n.write_files(images)
