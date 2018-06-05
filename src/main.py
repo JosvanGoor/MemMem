@@ -23,7 +23,7 @@ def list_files(directory):
     
     return os.listdir(directory)
 
-if __name__ == "__main__":
+if __name__ == "__main__2":
     dat = n.list_characters(testnames, easy_pkl)
     
     for name, chars in dat.items():
@@ -33,7 +33,7 @@ if __name__ == "__main__":
         print()
         
 
-if __name__ == "__main__2":
+if __name__ == "__main__":
     if sys.version_info[0] < 3:
         print("Please use python 3...")
         print("    Example usage: python3 path/to/directory/")
@@ -50,6 +50,8 @@ if __name__ == "__main__2":
     images = [data.Image(directory, f) for f in files]
     for img in images:
         img.load_processed()
+        cv2.imshow('img', img.image)
+        cv2.waitKey(0)
         img.segment_lines()
 
     n.write_files(images)

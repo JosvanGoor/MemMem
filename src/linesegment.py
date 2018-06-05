@@ -2,6 +2,33 @@ import cv2
 import numpy as np
 from tqdm import tqdm
 
+
+def getHistogram(image, exp_text_width, height, width):
+	exp_text_width = 15
+	hist = []
+	line_tuples = []
+	line_started = 0
+	start_line = 0
+	end_line = 0
+	for i in range(height):
+		sum_pixels = width - (sum(image[i])/255.0)
+		hist.append(sum_pixels)
+	average = (sum(hist)/len(hist))/2
+	for count, j in enumerate(hist):
+		if j>=average and start_line==0:
+			start_line = count
+			line_started = 1
+		elif j<=average and line_started:
+			end_line = count
+			if end_line-start_line>exp_text_width:
+				line_tuples.append([start_line,count])
+			start_line = 0
+			line_started = 0
+		elif j<average:
+			start_line = 0
+			line_started = 0
+	return line_tuples
+
 def getSliceHist(image, n_slices, exp_text_width, line_array, threshold, overshoot, PSL_width, height, width):
 	is_line = False
 	line_tuples = []
@@ -27,7 +54,7 @@ def getSliceHist(image, n_slices, exp_text_width, line_array, threshold, oversho
 	for count, i in enumerate(line_array):
 		if i>=1 and start_line==0:
 			start_line = count
-		elif i>1 and start_line!=0:
+		elif i>2 and start_line!=0:
 			is_line = True
 		elif i<=1 and is_line:
 			is_line = False
@@ -90,7 +117,7 @@ def showSegments(im, line_tuples, pad, height, width):
 		cv2.waitKey(0)
 
 
-def segmentLine(image, exp_text_width=20, pad=10, PSL_width=128, threshold=8, showseg=0):
+def segmentLine(image, exp_text_width=20, pad=10, PSL_width=128, threshold=8, showseg=0, useHist=0):
 	#image = cv2.imread(imname,0)
 	# image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 	# image = cv2.resize(image, (0,0), fx=0.5, fy=0.5)
@@ -102,10 +129,13 @@ def segmentLine(image, exp_text_width=20, pad=10, PSL_width=128, threshold=8, sh
 	threshold = PSL_width/8
 	line_array = [0]*height
 
-	line_tuples = getSliceHist(image, n_slices, exp_text_width, line_array, threshold, overshoot, PSL_width, height, width)
+	if(useHist):
+		line_tuples = getHistogram(image, exp_text_width, height, width)
+	else:	
+		line_tuples = getSliceHist(image, n_slices, exp_text_width, line_array, threshold, overshoot, PSL_width, height, width)
 	segments = saveSegments(image, "imname", line_tuples, pad, height, width, showseg)
-	#if showseg:
-	#	showSegments(image, line_tuples, pad, height, width)
+	if showseg:
+		showSegments(image, line_tuples, pad, height, width)
 
 	return segments
 
