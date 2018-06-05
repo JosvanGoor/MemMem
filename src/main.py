@@ -23,7 +23,7 @@ def list_files(directory):
     
     return os.listdir(directory)
 
-if __name__ == "__main__2":
+if __name__ == "__main__":
     dat = n.list_characters(testnames, easy_pkl)
     
     for name, chars in dat.items():
@@ -33,7 +33,7 @@ if __name__ == "__main__2":
         print()
         
 
-if __name__ == "__main__":
+if __name__ == "__main__2":
     if sys.version_info[0] < 3:
         print("Please use python 3...")
         print("    Example usage: python3 path/to/directory/")
