@@ -1,0 +1,34 @@
+nameslist: 16
+data: 16
+File: P25-Fg001_line_0
+    Nun-medial Kaf-final Zayin Mem-final Gimel Alef Shin Pe-final Resh 
+File: P25-Fg001_line_1
+    He Lamed Tet Yod Yod Yod Qof Ayin Gimel Waw Waw Zayin Waw Tsadi-medial Mem-medial Lamed Kaf-medial Bet Tet 
+File: P25-Fg001_line_2
+    Ayin Ayin Gimel Lamed Alef Pe Yod Shin Qof Gimel Resh Yod Resh Het Waw Resh Dalet Kaf-final Waw Pe Lamed Zayin Shin Lamed 
+File: P25-Fg001_line_3
+    Pe-final Kaf-final Nun-medial Tsadi-medial Waw Yod He Resh Dalet Lamed Bet Nun-medial Pe Waw Dalet Nun-medial Zayin Lamed Bet Gimel 
+File: P25-Fg001_line_4
+    Resh Pe-final Gimel Mem-medial Waw Zayin Yod Alef Kaf-medial Bet Waw Lamed Nun-medial 
+File: P25-Fg001_line_5
+    Yod Pe-final Tsadi-medial Qof Shin Ayin Gimel Resh Dalet Qof Samekh Lamed Yod He 
+File: 124-Fg004_line_0
+    Yod Alef Dalet Samekh Het Mem-final Nun-medial Tsadi-medial Shin Nun-medial Zayin Yod Resh 
+File: 124-Fg004_line_1
+    Bet Nun-medial Nun-medial Zayin Lamed Nun-medial Gimel Kaf-final Nun-medial Nun-final Zayin Lamed Gimel Zayin Waw Pe-final Waw Bet Tsadi-medial Nun-medial Shin Gimel Gimel Lamed Yod Tet Bet Pe Gimel Pe Resh Nun-medial Waw Zayin 
+File: 124-Fg004_line_2
+    Resh Shin Bet Shin Waw Ayin Yod Waw Tsadi-medial Qof Yod Kaf-medial Nun-medial Resh Lamed Lamed Alef He Shin Resh Waw Kaf-medial Tsadi-medial 
+File: 124-Fg004_line_3
+    Tsadi-medial Shin Yod Resh Het Kaf-final Nun-medial Zayin Lamed Kaf-final Nun-final Zayin Samekh Lamed Gimel Kaf-medial Ayin Dalet Zayin Waw Zayin Nun-medial Mem-final Gimel 
+File: 124-Fg004_line_4
+    Shin Waw Alef Taw Kaf-medial Lamed Alef Yod Mem-medial Gimel Het Mem-medial Waw Pe Ayin Bet Resh Yod Gimel Waw He Lamed Dalet Nun-medial Tsadi-medial 
+File: 124-Fg004_line_5
+    Yod Shin Resh Qof Taw He Tet Mem-medial Pe Resh Waw Alef Pe Waw Samekh Mem-final Ayin Waw Het Kaf-medial Taw Ayin Resh He Waw Bet Waw Resh 
+File: 124-Fg004_line_6
+    Mem-medial Resh Dalet Qof Waw Nun-medial Waw Het Yod Bet Alef Bet He Taw Dalet Resh Het Bet He Waw He Yod Alef Waw He He Taw Waw Lamed Samekh Waw Resh Taw Waw 
+File: 124-Fg004_line_7
+    Shin Yod Yod Yod Waw Lamed Alef Resh Lamed Waw He Yod Waw Bet Alef Lamed Taw Tet Waw Mem-final Waw Qof Waw Waw Nun-medial Lamed Taw Taw He Waw Dalet Resh Alef Waw Waw Ayin 
+File: 124-Fg004_line_8
+    Mem-medial Alef Resh Waw Taw Bet Waw Nun-medial Tsadi-medial Ayin Het Kaf-medial Waw Mem-final Waw Ayin Tsadi-medial Tsadi-medial Zayin Het He Bet Resh Waw Bet Yod 
+File: 124-Fg004_line_9
+    Mem-medial Taw Yod Waw Yod Taw Waw Yod Waw Mem-medial Waw Mem-final 

@@ -6,3 +6,5 @@ output_old/
 Outputs.zip
 tmp/
 **/network/RBA/
+**/Outputs/
+**/RBA

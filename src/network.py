@@ -56,11 +56,12 @@ def write_files(image_list, network_folder = "network", setname="RBA"):
     print("Generating and saving line segments and filelist... ", end="")
     
     # Check / guarantee required folders exists
-    image_folder = "{}/{}/Images".format(network_folder, setname)
-    names_folder = "{}/{}/Names".format(network_folder, setname)
+    image_folder = "{}/Data/{}/Images".format(network_folder, setname)
+    names_folder = "{}/Data/{}/Names".format(network_folder, setname)
     
     if not os.path.isdir(image_folder): os.makedirs(image_folder)
     if not os.path.isdir(names_folder): os.makedirs(names_folder)
+    #TODO: clean folders.
 
     nameslist = []
     
