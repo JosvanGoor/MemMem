@@ -1,3 +1,0 @@
-[submodule "Lib/TensorBase"]
-	path = Lib/TensorBase
-	url = https://github.com/kevinjliang/TensorBase.git
