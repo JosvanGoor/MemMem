@@ -2,6 +2,7 @@ import cv2
 import pickle
 import re
 import os
+import subprocess
 
 import data as d
 import network as n
@@ -99,4 +100,10 @@ def list_characters(nameslist, pkl_file):
 
     return rval
 
-    
+def run_network(yamlname = "RBA"):
+    wd = os.getcwd()
+    print(wd)
+    os.chdir("{}/network/Models/".format(wd))
+    #return subprocess.call(["python3 faster_rcnn_conv5.py -r 1 -m 3 -f 1 -t 0 -v 1 -i 1 -y '{}.yml'".format(yamlname)])
+    os.system("python3 faster_rcnn_conv5.py -r 1 -m 3 -f 1 -t 0 -v 1 -i 1 -y '{}.yml'".format(yamlname))
+    os.chdir(wd)
