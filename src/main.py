@@ -46,14 +46,29 @@ if __name__ == "__main__":
 
     directory = sys.argv[1]
     files = list_files(directory)
-    
-    images = [data.Image(directory, f) for f in files]
+    images = []
+
+    for f in files:
+        if(f.endswith(".txt")): continue
+        images.append(data.Image(directory, f))
+
+
     for img in images:
         img.load_processed()
         #cv2.imshow('img', img.image)
         #cv2.waitKey(0)
         img.segment_lines()
 
-    n.write_files(images)
+    namelist = n.write_files(images)
+    print(namelist)
+    n.run_network()
+    output = n.list_characters(namelist, "network/Data/RBA/Outputs/TEST_boxes_classes.pkl")
 
-    print("Network rval: {}".format(n.run_network()))
+    for name, chars in output.items():
+         print("File: {}\n    ".format(name), end="")
+         for c in chars:
+             print("{} ".format(c.name), end="")
+         print()
+
+    for img in images:
+        img.output_annotation(output)

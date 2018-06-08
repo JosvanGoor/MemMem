@@ -93,7 +93,7 @@ def list_characters(nameslist, pkl_file):
         charlist = []
         for rect, name in zip(line[0], line[1]):
             charlist.append(d.Character(rect[:4], rect[4], classes[name]))
-        rval[fname] = charlist
+        rval[strip_extention(fname)] = charlist
     
     for key, val in rval.items():
         rval[key] = sorted(val, key = lambda thing: thing.rect[0])
@@ -103,6 +103,11 @@ def list_characters(nameslist, pkl_file):
 def run_network(yamlname = "RBA"):
     wd = os.getcwd()
     print(wd)
+
+    if os.path.isdir("network/Data/{}/Outputs/".format(yamlname)):
+        print("Cleaning up previous outputs...")
+        os.system("rm -rf '{}/network/Data/{}/Outputs/'".format(wd, yamlname))
+
     os.chdir("{}/network/Models/".format(wd))
     #return subprocess.call(["python3 faster_rcnn_conv5.py -r 1 -m 3 -f 1 -t 0 -v 1 -i 1 -y '{}.yml'".format(yamlname)])
     os.system("python3 faster_rcnn_conv5.py -r 1 -m 3 -f 1 -t 0 -v 1 -i 1 -y '{}.yml'".format(yamlname))

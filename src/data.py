@@ -60,3 +60,11 @@ class Image:
         print("Segmenting {}/{}... ".format(self.folder, self.filename), end="")
         self.lines = ls.segmentLine(self.image)
         print("done!")
+
+    def output_annotation(self, linedata):
+        with open("{}/{}.txt".format(self.folder, self.filename), "w+") as file:
+            for line in self.line_names:
+                print("Getting data from {}".format(line))
+                for char in linedata[line]:
+                    file.write("{} ".format(char.name))
+                file.write("\r\n")
