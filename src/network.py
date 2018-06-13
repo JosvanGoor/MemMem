@@ -74,6 +74,13 @@ def write_files(image_list, network_folder = "network", setname="RBA"):
     with open("{}/test.txt".format(names_folder), "w+") as file:
         for name in nameslist:
             file.write("{}\n".format(name))
+    with open("{}/train.txt".format(names_folder), "w+") as file:
+        for name in nameslist:
+            file.write("{}\n".format(name))
+    with open("{}/valid.txt".format(names_folder), "w+") as file:
+        for name in nameslist:
+            file.write("{}\n".format(name))
+
 
     print("done")
     return nameslist
@@ -100,9 +107,25 @@ def list_characters(nameslist, pkl_file):
 
     return rval
 
+def check_ready():
+    if not os.path.isdir("network/Logs/RBA/"):
+        print("*** ERROR ***")
+        print("    Could not locate datafiles... Network wil probably fail!")
+        # pull files from somewhere?
+    
+    if not os.path.isfile("network/Lib/ready.flag"):
+        wd = os.getcwd()
+        os.chdir("{}/network/Lib/".format(wd))
+        print("{}/network/Lib/".format(wd))
+        os.system("make")
+        os.system("touch ready.flag")
+        os.chdir(wd)
+    else:
+        print("Found flag, no first time setup required...")
+
 def run_network(yamlname = "RBA"):
+    check_ready()
     wd = os.getcwd()
-    print(wd)
 
     if os.path.isdir("network/Data/{}/Outputs/".format(yamlname)):
         print("Cleaning up previous outputs...")
