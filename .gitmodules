@@ -1,3 +1,4 @@
 [submodule "src/network"]
 	path = src/network
 	url = http://github.com/josvangoor/tf-Faster-RCNN.git
+	branch = master
