@@ -2,6 +2,7 @@ import cv2
 import pickle
 import re
 import os
+import shutil
 import subprocess
 
 import data as d
@@ -113,23 +114,20 @@ def check_ready():
         print("    Could not locate datafiles... Network wil probably fail!")
         # pull files from somewhere?
     
-    if not os.path.isfile("network/Lib/ready.flag"):
-        wd = os.getcwd()
-        os.chdir("{}/network/Lib/".format(wd))
-        print("{}/network/Lib/".format(wd))
-        os.system("make")
-        os.system("touch ready.flag")
-        os.chdir(wd)
-    else:
-        print("Found flag, no first time setup required...")
+    wd = os.getcwd()
+    os.chdir("{}/network/Lib/".format(wd))
+    os.system("make")
+    os.chdir(wd)
 
+    
 def run_network(yamlname = "RBA"):
     check_ready()
     wd = os.getcwd()
 
     if os.path.isdir("network/Data/{}/Outputs/".format(yamlname)):
         print("Cleaning up previous outputs...")
-        os.system("rm -rf '{}/network/Data/{}/Outputs/'".format(wd, yamlname))
+        #os.system("rm -rf '{}/network/Data/{}/Outputs/'".format(wd, yamlname))
+        shutil.rmtree("network/Data/{}/Outputs/".format(yamlname))
 
     os.chdir("{}/network/Models/".format(wd))
     #return subprocess.call(["python3 faster_rcnn_conv5.py -r 1 -m 3 -f 1 -t 0 -v 1 -i 1 -y '{}.yml'".format(yamlname)])
