@@ -94,8 +94,8 @@ def list_characters(nameslist, pkl_file):
 
     rval = {}
 
-    print("nameslist: {}".format(len(nameslist)))
-    print("data: {}".format(len(data)))
+    #print("nameslist: {}".format(len(nameslist)))
+    #print("data: {}".format(len(data)))
 
     for fname, line in zip(nameslist, data):
         charlist = []

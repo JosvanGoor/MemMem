@@ -64,11 +64,10 @@ if __name__ == "__main__":
     n.run_network()
     output = n.list_characters(namelist, "network/Data/RBA/Outputs/TEST_boxes_classes.pkl")
 
-    for name, chars in output.items():
-         print("File: {}\n    ".format(name), end="")
-         for c in chars:
-             print("{} ".format(c.name), end="")
-         print()
+    print("Writing detection output to files...", end="")
 
     for img in images:
         img.output_annotation(output)
+
+    print("done!")
+    print("All tasks complete, exiting...")
